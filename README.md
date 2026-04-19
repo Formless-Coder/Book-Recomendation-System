@@ -148,14 +148,6 @@ model = neighbors.NearestNeighbors(n_neighbors=6, algorithm='kd_tree')
 model = neighbors.NearestNeighbors(n_neighbors=10, algorithm='ball_tree')
 ```
 
-## 📝 License
-
-This project is for educational purposes.
-
-## 👤 Author
-
-- **GitHub**: [Formless-Coder](https://github.com/Formless-Coder)
-
 ## 🙏 Acknowledgments
 
 - Dataset source: [Kaggle/Goodreads Books Dataset](https://www.kaggle.com)
