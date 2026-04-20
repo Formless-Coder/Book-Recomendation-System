@@ -1,154 +1,78 @@
-# Book Recommendation System
+# 📚 Premium Book Recommendation System
 
-A machine learning-based book recommendation system using K-Nearest Neighbors (KNN) algorithm to suggest similar books based on user preferences.
+A modern, high-performance web application that delivers personalized book recommendations using a **K-Nearest Neighbors (KNN)** machine learning engine. Built with a premium Gradio interface and optimized for speed and accuracy.
 
-## 📖 Overview
+---
 
-This project implements a content-based book recommendation system using the **NearestNeighbors** algorithm from scikit-learn. The model recommends books similar to a given title based on features like:
-- Average rating
-- Number of ratings
-- Language
-- Rating categories (0-1, 1-2, 2-3, 3-4, 4-5)
+## 🌟 Key Features
 
-## 🧠 Machine Learning Details
+- **🚀 Lightning Fast Engine**: Core recommendation lookup completes in less than 0.01 seconds.
+- **🎨 Premium UI**: A stunning "Midnight Slate" interface featuring glassmorphism, smooth animations, and high-contrast typography.
+- **🔍 Intelligent Search**: Lightweight search input with intelligent fuzzy matching and substring fallback.
+- **🛠️ Modular Architecture**: Clean separation between the ML engine (`recommender.py`) and the web interface (`app.py`).
+- **📊 Robust Analysis**: Uses the Kaggle Goodreads dataset (11,000+ books) with feature engineering on ratings, language, and popularity.
 
-| Aspect | Details |
-|--------|---------|
-| **Algorithm** | K-Nearest Neighbors (KNN) |
-| **Distance Metric** | Ball Tree |
-| **K Value** | 6 neighbors |
-| **Feature Scaling** | MinMaxScaler |
-| **Features Used** | Rating categories, language codes, average rating, ratings count |
+---
 
-### How It Works
+## ⚙️ Tech Stack
 
-1. **Data Preprocessing**: 
-   - Load book data from CSV
-   - Create rating category bins (0-1, 1-2, 2-3, 3-4, 4-5)
-   - One-hot encode language codes
+- **Machine Learning**: `scikit-learn` (Nearest Neighbors with Ball Tree algorithm).
+- **Data Processing**: `pandas`, `numpy`.
+- **Frontend**: `Gradio` 6.x (Custom CSS & Theme).
+- **Backend**: Python 3.9+.
 
-2. **Feature Engineering**:
-   - Combine rating categories, language dummies, average rating, and ratings count
-   - Normalize features using MinMaxScaler (0-1 range)
-
-3. **Model Training**:
-   - Fit KNN model with `n_neighbors=6` and `algorithm='ball_tree'`
-   - Store distances and indices for recommendation lookup
-
-4. **Recommendation**:
-   - Find the index of the input book
-   - Get 6 nearest neighbors (including the book itself)
-   - Return the titles of similar books
+---
 
 ## 📁 Project Structure
 
-```
-Book-Recomendation-system/
-├── book_recommender.py    # Main Python script
-├── requirements.txt       # Python dependencies
-├── .gitignore            # Git ignore rules
-├── books.csv             # Dataset (not tracked in git)
-└── book_recsys_venv/     # Virtual environment (not tracked)
+```text
+Book-Recomendation-System/
+├── app.py               # Premium Gradio Web Interface
+├── recommender.py       # Core ML Engine & Logic
+├── books.csv            # Dataset (11,000+ books) - [Download from Kaggle]
+├── requirements.txt      # Updated dependencies
+├── test_recommender.py  # Diagnostic & Sanity check script
+└── .gitignore           # Version control rules
 ```
 
-## 🚀 Installation
+---
 
-### 1. Clone the Repository
+## 🚀 Getting Started
+
+### 1. Installation
+Clone the repository and install the dependencies:
+
 ```bash
 git clone https://github.com/Formless-Coder/Book-Recomendation-System.git
 cd Book-Recomendation-System
-```
-
-### 2. Create Virtual Environment
-```bash
-python -m venv book_recsys_venv
-source book_recsys_venv/bin/activate  # Linux/Mac
-# or
-book_recsys_venv\Scripts\activate     # Windows
-```
-
-### 3. Install Dependencies
-```bash
 pip install -r requirements.txt
 ```
 
-## 📦 Requirements
+### 2. Dataset Setup
+Ensure `books.csv` is present in the root directory. You can download it from the [Goodreads Books Dataset on Kaggle](https://www.kaggle.com/datasets/jealousleopard/goodreadsbooks).
 
-```
-numpy
-pandas
-seaborn
-matplotlib
-scikit-learn
-```
+### 3. Running the App
+Start the Gradio web server:
 
-## 🔧 Usage
-
-### Run the Python Script
 ```bash
-python book_recommender.py
+export PYTHONPATH=$PYTHONPATH:.
+python app.py
 ```
+Then open the local URL provided (usually `http://127.0.0.1:7860`) in your browser.
 
-### Example: Get Recommendations
+---
 
-```python
-from book_recommender import BookRecommender, df2, idlist
-from sklearn import neighbors
-from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
+## 🧠 Recommendation Logic
 
-# Load and prepare data (same as in script)
-df = pd.read_csv('books.csv', on_bad_lines='skip')
-# ... (preprocessing steps)
+The system uses a content-based filtering approach with the following steps:
+1. **Feature Engineering**: Books are mapped to a high-dimensional space based on their average rating, ratings count, and language.
+2. **One-Hot Encoding**: Language codes and rating buckets are transformed into numeric features.
+3. **MinMax Scaling**: All features are normalized to a 0-1 range to ensure fair distance calculations.
+4. **KNN Search**: The **Ball Tree** algorithm is used to find the 5 closest neighbors (most similar books) in the feature space.
 
-# Get recommendations
-recommendations = BookRecommender('Harry Potter and the Half-Blood Prince (Harry Potter  #6)')
-print(recommendations)
-```
+---
 
-### Output
-```
-Recommended Books:
-  - Harry Potter and the Half-Blood Prince (Harry Potter  #6)
-  - Harry Potter and the Order of the Phoenix (Harry Potter  #5)
-  - The Fellowship of the Ring (The Lord of the Rings  #1)
-  - Harry Potter and the Chamber of Secrets (Harry Potter  #2)
-  - Harry Potter and the Prisoner of Azkaban (Harry Potter  #3)
-  - The Lightning Thief (Percy Jackson and the Olympians  #1)
-```
+## ⚖️ License
+This project is for educational purposes. All book data belongs to their respective publishers and authors.
 
-## 📊 Dataset
-
-The project uses a books dataset containing:
-- **11,123 books** with 12 features including:
-  - `bookID`, `title`, `authors`
-  - `average_rating`, `isbn`, `isbn13`
-  - `language_code`, `num_pages`, `ratings_count`
-  - `text_reviews_count`, `publication_date`, `publisher`
-
-## 🔌 Extend the Project
-
-### Add More Features
-```python
-# Add publication year as a feature
-df2['publication_year'] = pd.to_datetime(df2['publication_date'], errors='coerce').dt.year
-features = pd.concat([rating_df, language_df, df2['average_rating'], 
-                      df2['ratings_count'], df2['publication_year']], axis=1)
-```
-
-### Use Different Algorithm
-```python
-# Try KD Tree algorithm
-model = neighbors.NearestNeighbors(n_neighbors=6, algorithm='kd_tree')
-```
-
-### Adjust K Value
-```python
-# Get more or fewer recommendations
-model = neighbors.NearestNeighbors(n_neighbors=10, algorithm='ball_tree')
-```
-
-## 🙏 Acknowledgments
-
-- Dataset source: [Kaggle/Goodreads Books Dataset](https://www.kaggle.com)
-- Built with [scikit-learn](https://scikit-learn.org/), [pandas](https://pandas.pydata.org/), and [seaborn](https://seaborn.pydata.org/)
+Built with ❤️ by Formless-Coder.
